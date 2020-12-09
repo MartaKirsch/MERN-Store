@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const apiRoutes = require('./routes/apiRoutes');
+const session = require('express-session');
 
 const app = express();
 
@@ -26,6 +27,9 @@ app.use((req, res, next) => {
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
+
+//session
+app.use(session({secret: 'ssshhhhh', resave:true, saveUninitialized: false}));
 
 
 app.use('/api',apiRoutes);
