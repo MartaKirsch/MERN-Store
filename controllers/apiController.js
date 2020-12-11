@@ -23,6 +23,8 @@ const checkLogIn = (req, res)=>{
 
 const register = (req,res) => {
 
+  let sess = req.session;
+
   let account = new Account({
     login:req.body.login,
     password: req.body.password
@@ -36,6 +38,7 @@ const register = (req,res) => {
     }
     else
     {
+      sess.login = req.body.login;
       res.json({status:"OK"});
     }
 
@@ -43,8 +46,54 @@ const register = (req,res) => {
 
 }
 
+const logIn = (req, res)=>{
+
+  let sess = req.session;
+
+  Account.find({login: req.body.login}).then(docs=>{
+
+    if(docs||docs.length===0)
+    {
+      if(req.body.password!==docs[0].password)
+      {
+        res.json({mssg:"Wrong password!", input:"password"});
+      }
+      else
+      {
+        sess.login=req.body.login;
+        res.json({mssg:"OK C:", input:"none"});
+      }
+    }
+  }).catch(err=>{
+    res.json({mssg:"There is no user with that login!", input:"login",err});
+  });
+
+};
+
+const checkIfExists = (req,res) =>{
+  Account.find({login:req.body.login}).then(docs=>{
+    if(docs.length===1)
+    {
+      res.json({exists:true});
+    }
+    else
+    {
+      res.json({exists:false});
+    }
+  })
+}
+
+const getSingleItem = (req, res)=>{
+  Item.findById(req.body.id).then((docs)=>{
+    res.json(docs);
+  });
+};
+
 module.exports = {
   loaditems,
   checkLogIn,
-  register
+  register,
+  checkIfExists,
+  logIn,
+  getSingleItem
 };
