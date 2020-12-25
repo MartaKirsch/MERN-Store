@@ -62,7 +62,7 @@ const logIn = (req, res)=>{
       else
       {
         sess.login=req.body.login;
-        res.json({mssg:"OK C:", input:"none"});
+        res.json({mssg:"OK C:", input:"none",login:req.body.login});
       }
     }
   }).catch(err=>{
@@ -116,6 +116,21 @@ const makeAnOrder = (req, res)=>{
   })
 };
 
+
+const loadOrders = (req, res)=>{
+
+  let sess = req.session;
+
+  //get the user
+  Account.findOne({login: sess.login}).then(doc=>{
+
+    res.json(doc.orders.reverse());
+
+  }).catch(err=>{
+    res.json(err);
+  });
+};
+
 module.exports = {
   loaditems,
   checkLogIn,
@@ -123,5 +138,6 @@ module.exports = {
   checkIfExists,
   logIn,
   getSingleItem,
-  makeAnOrder
+  makeAnOrder,
+  loadOrders
 };

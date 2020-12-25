@@ -8,6 +8,8 @@ router.get('/loaditems', apiController.loaditems);
 
 router.get('/checkLogIn', apiController.checkLogIn);
 
+router.get('/loadOrders', apiController.loadOrders);
+
 router.post('/register', apiController.register);
 
 router.post('/logIn', apiController.logIn);
