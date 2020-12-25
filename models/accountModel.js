@@ -9,7 +9,16 @@ const accountSchema = new Schema({
   "password":{
     type: String,
     required: [true, 'Password is required']
-  }
+  },
+  "orders":[{
+    _id: String,
+    date: {
+      type: Date,
+      default: Date.now
+    },
+    price: Number,
+    items:[{_id:String,name:String,price:Number,url:String,quantity:Number}]
+  }]
 });
 
 //create model

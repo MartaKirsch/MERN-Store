@@ -1,6 +1,7 @@
 const Item = require('../models/itemModel');
 const Account = require('../models/accountModel');
 const session = require('express-session');
+const mongoose = require('mongoose');
 
 const loaditems = (req,res)=>{
   Item.find({}).then(data=>{
@@ -89,11 +90,38 @@ const getSingleItem = (req, res)=>{
   });
 };
 
+
+const makeAnOrder = (req, res)=>{
+
+  let sess = req.session;
+
+  //get the user
+  Account.findOne({login: sess.login}).then(doc=>{
+
+    doc.orders.push({
+      //_id: mongoose.Types.ObjectID,
+      _id: ""+(doc.orders.length+1),
+      items: req.body.items,
+      price: req.body.sum
+    });
+
+    //res.json(doc);
+
+    doc.save().then(res=>{
+      res.json({saved:true})
+    }).catch(err=>{
+      res.json(err)
+    });
+
+  })
+};
+
 module.exports = {
   loaditems,
   checkLogIn,
   register,
   checkIfExists,
   logIn,
-  getSingleItem
+  getSingleItem,
+  makeAnOrder
 };

@@ -16,5 +16,7 @@ router.post('/getSingleItem', apiController.getSingleItem);
 
 router.post('/checkIfExists', apiController.checkIfExists);
 
+router.post('/makeAnOrder', apiController.makeAnOrder);
+
 
 module.exports = router;
