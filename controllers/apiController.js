@@ -14,7 +14,10 @@ const checkLogIn = (req, res)=>{
 
   if(sess.login)
   {
-    res.json({logged:true});
+    Account.findOne({login:sess.login}).then(doc=>{
+
+      res.json({logged:true, account:doc});
+    })
   }
   else
   {
@@ -131,6 +134,16 @@ const loadOrders = (req, res)=>{
   });
 };
 
+
+const logout = (req,res)=>{
+  let sess = req.session;
+
+  req.session.login = null;
+  res.json({success:true});
+};
+
+
+
 module.exports = {
   loaditems,
   checkLogIn,
@@ -139,5 +152,6 @@ module.exports = {
   logIn,
   getSingleItem,
   makeAnOrder,
-  loadOrders
+  loadOrders,
+  logout
 };

@@ -10,6 +10,8 @@ router.get('/checkLogIn', apiController.checkLogIn);
 
 router.get('/loadOrders', apiController.loadOrders);
 
+router.get('/logout', apiController.logout);
+
 router.post('/register', apiController.register);
 
 router.post('/logIn', apiController.logIn);
