@@ -1,5 +1,6 @@
 const Item = require('../models/itemModel');
 const Account = require('../models/accountModel');
+const Order = require('../models/orderModel');
 const session = require('express-session');
 const mongoose = require('mongoose');
 
@@ -101,33 +102,55 @@ const makeAnOrder = (req, res)=>{
   //get the user
   Account.findOne({login: sess.login}).then(doc=>{
 
-    doc.orders.push({
-      //_id: mongoose.Types.ObjectID,
-      _id: ""+(doc.orders.length+1),
-      items: req.body.items,
-      price: req.body.sum
+    let order = new Order({
+    items: req.body.items,
+    price: req.body.sum
     });
 
-    //res.json(doc);
+    order.save().then(newOrder=>{
 
-    doc.save().then(res=>{
-      res.json({saved:true})
-    }).catch(err=>{
-      res.json(err)
-    });
+      doc.orders.push(newOrder._id);
 
-  })
+      doc.save().then(blob=>{
+        res.json({saved:true})
+      }).catch(err=>{
+        res.json(err)
+      });
+    })
+
+  });
 };
 
 
-const loadOrders = (req, res)=>{
+const loadOrders = async (req, res)=>{
 
   let sess = req.session;
 
   //get the user
   Account.findOne({login: sess.login}).then(doc=>{
 
-    res.json(doc.orders.reverse());
+    let orders = [];
+
+    for (let i = 0; i < doc.orders.length; i++) {
+      Order.findById(doc.orders[i]).then(ord=>{
+        orders.push(ord);
+        if(doc.orders.length===orders.length)
+        {
+          res.json(orders.reverse());
+        }
+      })
+    }
+
+    // const promises = doc.orders.map.map(async id => {
+    //   // request details from GitHub’s API with Axios
+    //   const response = await Order.findById(id);
+    //
+    //   return response;
+    // })
+    //
+    // // wait until all promises resolve
+    // const orders = await Promise.all(promises)
+
 
   }).catch(err=>{
     res.json(err);
