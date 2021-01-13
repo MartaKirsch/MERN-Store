@@ -1,5 +1,6 @@
 const Item = require('../models/itemModel');
 const Account = require('../models/accountModel');
+const Address = require('../models/addressModel');
 const Order = require('../models/orderModel');
 const session = require('express-session');
 const mongoose = require('mongoose');
@@ -166,6 +167,35 @@ const logout = (req,res)=>{
 };
 
 
+const addAddress = (req,res)=>{
+  let sess=req.session;
+  let address = new Address({...req.body, user:sess.login});
+
+  address.save().then(doc=>res.json(doc)).catch(err=>console.log(err));
+};
+
+
+const loadAddresses = (req,res)=>{
+  let sess=req.session;
+  Address.find({user:sess.login})
+  .then(docs=>res.json(docs))
+  .catch(err=>console.log(err));
+};
+
+
+const getAddress = (req,res)=>{
+  Address.findById(req.params.id).then(doc=>{
+    res.json(doc);
+  })
+  .catch(err=>console.log(err));
+};
+
+const updateAddress = (req,res)=>{
+  Address.findOneAndUpdate({_id:req.params.id},req.body,{new:true}).then(doc=>{
+    res.json(doc);
+  })
+  .catch(err=>console.log(err));
+};
 
 module.exports = {
   loaditems,
@@ -176,5 +206,9 @@ module.exports = {
   getSingleItem,
   makeAnOrder,
   loadOrders,
-  logout
+  logout,
+  addAddress,
+  loadAddresses,
+  getAddress,
+  updateAddress
 };
