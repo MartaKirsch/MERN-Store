@@ -16,6 +16,8 @@ router.get('/loadAddresses',apiController.loadAddresses);
 
 router.get('/getAddress/:id',apiController.getAddress);
 
+router.get('/deleteAddress/:id',apiController.deleteAddress);
+
 router.post('/updateAddress/:id',apiController.updateAddress);
 
 router.post('/register', apiController.register);

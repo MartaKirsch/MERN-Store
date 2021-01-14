@@ -187,11 +187,22 @@ const getAddress = (req,res)=>{
   Address.findById(req.params.id).then(doc=>{
     res.json(doc);
   })
-  .catch(err=>console.log(err));
+  .catch(err=>{
+    console.log(err);
+    res.sendStatus(404);
+    //res.json({statusText:"NOT_OK"});
+  });
 };
 
 const updateAddress = (req,res)=>{
   Address.findOneAndUpdate({_id:req.params.id},req.body,{new:true}).then(doc=>{
+    res.json(doc);
+  })
+  .catch(err=>console.log(err));
+};
+
+const deleteAddress = (req,res)=>{
+  Address.findOneAndDelete({_id:req.params.id}).then(doc=>{
     res.json(doc);
   })
   .catch(err=>console.log(err));
@@ -210,5 +221,6 @@ module.exports = {
   addAddress,
   loadAddresses,
   getAddress,
-  updateAddress
+  updateAddress,
+  deleteAddress
 };

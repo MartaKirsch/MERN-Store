@@ -10,6 +10,9 @@ const port = 5000;
 
 app.listen(port,()=>{console.log('Listening to port: '+port);});
 
+//mongoose findOneAndUpdate depracation
+mongoose.set('useFindAndModify', false);
+
 //connect to the database
 mongoose.connect("mongodb+srv://pandeu:mernshop@cluster0.oe60k.mongodb.net/shop?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log(`Database connected successfully`))
