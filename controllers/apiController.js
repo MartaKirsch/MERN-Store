@@ -208,6 +208,43 @@ const deleteAddress = (req,res)=>{
   .catch(err=>console.log(err));
 };
 
+const getOrder = (req,res)=>{
+  Order.findById(req.params.id).then(doc=>{
+    res.json(doc);
+  })
+  .catch(err=>{
+    console.log(err);
+    res.sendStatus(404);
+  });
+};
+
+const loadItemsFromOrder = (req,res)=>{
+  let order = req.body.order;
+  let items=[];
+
+  for(let i=0;i<order.items.length;i++)
+  {
+    Item.findById(order.items[i]._id).then(doc=>{
+      let newItem = {
+        _id:doc._id,
+        name:doc.name,
+        price:doc.price,
+        url:doc.url,
+        quantity:order.items[i].quantity
+      };
+      items.push(newItem);
+
+      if(items.length==order.items.length)
+      {
+        res.json(items);
+      }
+    }).catch(err=>console.log(err));
+
+
+  }
+
+};
+
 module.exports = {
   loaditems,
   checkLogIn,
@@ -222,5 +259,7 @@ module.exports = {
   loadAddresses,
   getAddress,
   updateAddress,
-  deleteAddress
+  deleteAddress,
+  getOrder,
+  loadItemsFromOrder
 };

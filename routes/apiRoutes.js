@@ -10,6 +10,8 @@ router.get('/checkLogIn', apiController.checkLogIn);
 
 router.get('/loadOrders', apiController.loadOrders);
 
+router.get('/getOrder/:id',apiController.getOrder);
+
 router.get('/logout', apiController.logout);
 
 router.get('/loadAddresses',apiController.loadAddresses);
@@ -31,6 +33,8 @@ router.post('/checkIfExists', apiController.checkIfExists);
 router.post('/makeAnOrder', apiController.makeAnOrder);
 
 router.post('/addAddress', apiController.addAddress);
+
+router.post('/loadItemsFromOrder',apiController.loadItemsFromOrder);
 
 
 module.exports = router;
